@@ -1,11 +1,6 @@
-export default class Packet<T, S> {
+export default class Packet<S> {
   stream: S
-  _data!: T
   constructor (stream: S) {
     this.stream = stream
-  }
-
-  getData (): T {
-    return this._data
   }
 }

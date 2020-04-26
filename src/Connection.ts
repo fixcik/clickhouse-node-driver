@@ -2,8 +2,9 @@ import { Socket } from 'net'
 import * as defines from './defines'
 import BufferedStreamReader from './streams/BufferedStreamReader'
 import BufferedStreamWriter from './streams/BufferedStreamWriter'
-import HelloPacket from './protocol/packets/client/HelloClientPacket'
+import HelloClientPacket from './protocol/packets/client/HelloClientPacket'
 import HelloServerPacket from './protocol/packets/server/HelloServerPacket'
+import ExceptionPacket from './protocol/packets/server/ExceptionPacket'
 
 export interface ConnectionOptions {
   host: string;
@@ -56,11 +57,8 @@ export default class Connection {
     if (this.connected) {
       this.disconnect()
     }
-    try {
-      this._initConnection(this.host, this.port)
-    } catch (e) {
-      console.error(e)
-    }
+
+    this._initConnection(this.host, this.port)
   }
 
   async _initConnection (host: string, port: number): Promise<void> {
@@ -74,28 +72,27 @@ export default class Connection {
         this.readStream = new BufferedStreamReader()
         this.writeStream = new BufferedStreamWriter()
 
-        this.readStream.on('error', (err) => {
-          console.log(err)
-        })
+        // this.readStream.on('error', (err) => {
+        //   console.log(err)
+        // })
 
-        this.writeStream.on('error', (err) => {
-          console.error(err)
-        })
+        // this.writeStream.on('error', (err) => {
+        //   console.error(err)
+        // })
 
         socket.pipe(this.readStream)
         // this.writeStream.pipe(socket)
 
-        this._sendHello()
-        await this._readHello()
-
-        this._sendHello()
-        await this._readHello()
-
-        resolve()
-      })
-      socket.on('error', err => {
-        console.log(err)
-        reject(err)
+        try {
+          this._sendHello()
+          await this._readHello()
+          this._sendHello()
+          await this._readHello()
+          resolve()
+        } catch (e) {
+          console.log()
+          reject(e)
+        }
       })
       socket.on('close', () => {
         this.connected = false
@@ -111,7 +108,7 @@ export default class Connection {
   }
 
   _sendHello (): void {
-    const packet = new HelloPacket(
+    const packet = new HelloClientPacket(
       this.socket,
       {
         clientName: `${defines.DBMS_NAME} ${defines.CLIENT_NAME}`,
@@ -131,8 +128,10 @@ export default class Connection {
 
     if (packet instanceof HelloServerPacket) {
       console.log(packet.getData())
+    } else if (packet instanceof ExceptionPacket) {
+      throw packet.getException()
     } else {
-      console.log(packet.getData())
+      this.disconnect()
     }
   }
 

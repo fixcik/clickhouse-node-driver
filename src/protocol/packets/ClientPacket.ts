@@ -12,8 +12,9 @@ export enum ClientPacketTypes {
   TABLES_STATUS_REQUEST
 }
 
-export default class ClientPacket<T, S extends NodeJS.WritableStream = Writable> extends Packet<T, S> {
+export default class ClientPacket<T, S extends NodeJS.WritableStream = Writable> extends Packet<S> {
   type!: ClientPacketTypes
+  _data: T
   constructor (stream: S, data: T) {
     super(stream)
     this._data = data

@@ -17,13 +17,20 @@ export enum ServerPacketTypes {
   TABLE_COLUMNS
 }
 
-export default class ServerPacket<T, S = BufferedStreamReader> extends Packet<T, S> {
+export default class ServerPacket<T, S = BufferedStreamReader> extends Packet<S> {
+  _readed = false;
+  _data!: T;
   async read (): Promise<this> {
     this._data = await this._read()
+    this._readed = true
     return this
   }
 
   async _read (): Promise<T> {
     throw new NotImplementedError()
+  }
+
+  getData (): T {
+    return this._data
   }
 }

@@ -1,5 +1,6 @@
 import ServerPacket from '../ServerPacket'
 import { readBinaryString, readBinaryInt32, readBinaryUInt8 } from '../../../reader'
+import { DbException } from '../../../exceptions'
 
 export interface ExceptionPacketData {
     code: number;
@@ -31,5 +32,9 @@ export default class ExceptionPacket extends ServerPacket<ExceptionPacketData> {
       stackTrace,
       nested
     }
+  }
+
+  getException (): DbException {
+    return new DbException(this.getData())
   }
 }
