@@ -15,3 +15,10 @@ export const DBMS_MIN_REVISION_WITH_CLIENT_WRITE_INFO = 54420
 
 export const DBMS_DEFAULT_CONNECT_TIMEOUT_SEC = 10
 export const DBMS_DEFAULT_TIMEOUT_SEC = 300
+
+export const DBMS_NAME = 'ClickHouse'
+export const CLIENT_NAME = 'python-driver'
+export const CLIENT_VERSION_MAJOR = 0
+export const CLIENT_VERSION_MINOR = 0
+export const CLIENT_VERSION_PATCH = 1
+export const CLIENT_REVISION = 54421

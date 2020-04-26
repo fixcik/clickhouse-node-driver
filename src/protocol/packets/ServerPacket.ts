@@ -1,6 +1,6 @@
-import { Readable } from 'stream'
 import { NotImplementedError } from '../../exceptions'
 import Packet from '../Packet'
+import BufferedStreamReader from '../../streams/BufferedStreamReader'
 
 export enum ServerPacketTypes {
   HELLO,
@@ -17,13 +17,13 @@ export enum ServerPacketTypes {
   TABLE_COLUMNS
 }
 
-export default class ServerPacket<T, S extends NodeJS.ReadableStream = Readable> extends Packet<S> {
-  data?: T
-  read (): void {
-    this.data = this._read()
+export default class ServerPacket<T, S = BufferedStreamReader> extends Packet<T, S> {
+  async read (): Promise<this> {
+    this._data = await this._read()
+    return this
   }
 
-  _read (): T {
+  async _read (): Promise<T> {
     throw new NotImplementedError()
   }
 }

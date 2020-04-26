@@ -1,12 +1,7 @@
-import { PacketOptions } from './../Packet'
 import { NotImplementedError } from '../../exceptions'
 import Packet from '../Packet'
 import { writeVarint } from '../../varint'
 import { Writable } from 'stream'
-
-export interface ClientPacketOptions<T, S> extends PacketOptions<S> {
-  data: T;
-}
 
 export enum ClientPacketTypes {
   HELLO,
@@ -17,17 +12,16 @@ export enum ClientPacketTypes {
   TABLES_STATUS_REQUEST
 }
 
-export default class ClientPacket<T, S extends NodeJS.WritableStream = Writable> extends Packet<S> {
+export default class ClientPacket<T, S extends NodeJS.WritableStream = Writable> extends Packet<T, S> {
   type!: ClientPacketTypes
-  data: T
-  constructor ({ data, ...opts }: ClientPacketOptions<T, S>) {
-    super(opts)
-    this.data = data
+  constructor (stream: S, data: T) {
+    super(stream)
+    this._data = data
   }
 
   write (): void {
     writeVarint(this.type, this.stream)
-    this._write(this.data)
+    this._write(this._data)
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars

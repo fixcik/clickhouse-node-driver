@@ -1,12 +1,8 @@
-import { readBinaryString } from './reader'
-import { writeVarint, readVarint } from './varint'
-import { writeBinaryString } from './writer'
 import { Socket } from 'net'
-import { DBMS_DEFAULT_TIMEOUT_SEC, DBMS_DEFAULT_CONNECT_TIMEOUT_SEC } from './defines'
+import * as defines from './defines'
 import BufferedStreamReader from './streams/BufferedStreamReader'
 import BufferedStreamWriter from './streams/BufferedStreamWriter'
 import HelloPacket from './protocol/packets/client/HelloClientPacket'
-import { ServerPacketTypes } from './protocol/packets/ServerPacket'
 import HelloServerPacket from './protocol/packets/server/HelloServerPacket'
 
 export interface ConnectionOptions {
@@ -38,7 +34,7 @@ export default class Connection {
   readStream!: BufferedStreamReader
   writeStream!: BufferedStreamWriter
 
-  constructor ({ host, port, database, user = 'default', password = '', sendReceiveTimeout = DBMS_DEFAULT_TIMEOUT_SEC, connectionTimeout = DBMS_DEFAULT_CONNECT_TIMEOUT_SEC }: ConnectionOptions) {
+  constructor ({ host, port, database, user = 'default', password = '', sendReceiveTimeout = defines.DBMS_DEFAULT_TIMEOUT_SEC, connectionTimeout = defines.DBMS_DEFAULT_CONNECT_TIMEOUT_SEC }: ConnectionOptions) {
     this.database = database
     this.host = host
     this.port = port
@@ -67,7 +63,7 @@ export default class Connection {
     }
   }
 
-  _initConnection (host: string, port: number): Promise<void> {
+  async _initConnection (host: string, port: number): Promise<void> {
     const socket = this._createSocket(host, port)
     socket.setTimeout(this.sendReceiveTimeout)
 
@@ -90,7 +86,11 @@ export default class Connection {
         // this.writeStream.pipe(socket)
 
         this._sendHello()
-        this._readHello()
+        await this._readHello()
+
+        this._sendHello()
+        await this._readHello()
+
         resolve()
       })
       socket.on('error', err => {
@@ -111,35 +111,29 @@ export default class Connection {
   }
 
   _sendHello (): void {
-    const packet = new HelloPacket({
-      stream: this.socket,
-      data: {
-        clientName: 'ClickHouse node-driver',
-        clientMajorVersion: 0,
-        clientMinorVersion: 0,
-        clientRevision: 1,
+    const packet = new HelloPacket(
+      this.socket,
+      {
+        clientName: `${defines.DBMS_NAME} ${defines.CLIENT_NAME}`,
+        clientMajorVersion: defines.CLIENT_VERSION_MAJOR,
+        clientMinorVersion: defines.CLIENT_VERSION_MINOR,
+        clientRevision: defines.CLIENT_REVISION,
         database: this.database,
         user: this.user,
         password: this.password
       }
-    })
+    )
     packet.write()
   }
 
-  _readHello (): void {
-    this.readStream.on('data', () => {
-      const stream = this.readStream
-      const packetType = readVarint(stream)
-      console.log(packetType, 'pack')
+  async _readHello (): Promise<void> {
+    const packet = await this.readStream.readPacket()
 
-      switch (packetType) {
-        case ServerPacketTypes.HELLO: {
-          const packet = new HelloServerPacket({ stream })
-          packet.read()
-          console.log(packet.data)
-        }
-      }
-    })
+    if (packet instanceof HelloServerPacket) {
+      console.log(packet.getData())
+    } else {
+      console.log(packet.getData())
+    }
   }
 
   ping (): boolean {
@@ -147,5 +141,6 @@ export default class Connection {
   }
 
   disconnect (): void {
+    // Do smth
   }
 }
