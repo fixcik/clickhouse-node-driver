@@ -1,9 +1,4 @@
-import { ServerPacketTypes } from './../protocol/packets/ServerPacket'
 import { Writable } from 'stream'
-import ServerPacket from '../protocol/packets/ServerPacket'
-import { readVarUint } from '../varint'
-import HelloServerPacket from '../protocol/packets/server/HelloServerPacket'
-import ExceptionPacket from '../protocol/packets/server/ExceptionPacket'
 
 export default class BufferedStreamReader extends Writable {
   buffer!: Buffer
@@ -30,23 +25,6 @@ export default class BufferedStreamReader extends Writable {
         resolve()
       })
     })
-  }
-
-  async readPacket (): Promise<ServerPacket<unknown>> {
-    const packetType = await readVarUint(this)
-    let packet
-    switch (packetType) {
-      case ServerPacketTypes.HELLO:
-        packet = new HelloServerPacket(this)
-        break
-      case ServerPacketTypes.EXCEPTION:
-        packet = new ExceptionPacket(this)
-        break
-      default:
-        throw new Error('Unknown packet type')
-    }
-    await packet.read()
-    return packet
   }
 
   async read (unread: number): Promise<Buffer> {

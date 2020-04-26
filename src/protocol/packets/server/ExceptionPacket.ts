@@ -21,7 +21,7 @@ export default class ExceptionPacket extends ServerPacket<ExceptionPacketData> {
     let nested
 
     if (hasNested) {
-      const packet = await (new ExceptionPacket(this.stream)).read()
+      const packet = await (new ExceptionPacket(this.conn)).read()
       nested = packet.getData()
     }
 

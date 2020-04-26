@@ -9,3 +9,13 @@ export const writeBinaryString = (text: string, stream: NodeJS.WritableStream): 
   const buff = Buffer.from(text, 'utf-8')
   writeBinaryBytes(buff, stream)
 }
+
+const packInt = (number: number, size: number, unsigned = false): Buffer => {
+  const buff = Buffer.alloc(size)
+  buff[unsigned ? 'writeUIntLE' : 'writeIntLE'](number, 0, size)
+  return buff
+}
+
+export const writeBinaryUInt8 = (number: number, stream: NodeJS.WritableStream): void => {
+  writeBinaryBytes(packInt(number, 1, true), stream)
+}

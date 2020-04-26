@@ -1,6 +1,13 @@
-export default class Packet<S> {
-  stream: S
-  constructor (stream: S) {
-    this.stream = stream
+import Connection from '../Connection'
+import { NotImplementedError } from '../exceptions'
+
+export default class Packet {
+  conn: Connection
+  constructor (conn: Connection) {
+    this.conn = conn
+  }
+
+  get stream (): unknown {
+    throw new NotImplementedError()
   }
 }

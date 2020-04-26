@@ -1,6 +1,6 @@
 import { NotImplementedError } from '../../exceptions'
 import Packet from '../Packet'
-import BufferedStreamReader from '../../streams/BufferedStreamReader'
+import BufferedStreamReader from '../../BufferedStreamReader'
 
 export enum ServerPacketTypes {
   HELLO,
@@ -17,7 +17,7 @@ export enum ServerPacketTypes {
   TABLE_COLUMNS
 }
 
-export default class ServerPacket<T, S = BufferedStreamReader> extends Packet<S> {
+export default class ServerPacket<T> extends Packet {
   _readed = false;
   _data!: T;
   async read (): Promise<this> {
@@ -26,11 +26,18 @@ export default class ServerPacket<T, S = BufferedStreamReader> extends Packet<S>
     return this
   }
 
+  get stream (): BufferedStreamReader {
+    return this.conn.readStream
+  }
+
   async _read (): Promise<T> {
     throw new NotImplementedError()
   }
 
   getData (): T {
+    if (!this._readed) {
+      throw new Error('Unreaded packet')
+    }
     return this._data
   }
 }
