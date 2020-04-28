@@ -1,9 +1,9 @@
-import ClientPacket, { ClientPacketTypes } from '../ClientPacket'
+import ClientPacket from '../ClientPacket'
 import { writeBinaryString } from '../../../writer'
 import * as defines from '../../../defines'
 import ClientInfoPacket from './ClientInfoPacket'
 import { writeVarint } from '../../../varint'
-import { QueryProcessingStage } from '../..'
+import { QueryProcessingStage, ClientPacketTypes } from '../../enums'
 
 export interface QueryPacketData {
     query: string;

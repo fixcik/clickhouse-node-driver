@@ -3,15 +3,7 @@ import Packet from '../Packet'
 import { writeVarint } from '../../varint'
 import { Writable } from 'stream'
 import Connection from '../../Connection'
-
-export enum ClientPacketTypes {
-  HELLO,
-  QUERY,
-  DATA,
-  CANCEL,
-  PING,
-  TABLES_STATUS_REQUEST
-}
+import { ClientPacketTypes } from '../enums'
 
 export default class ClientPacket<T> extends Packet {
   type?: ClientPacketTypes

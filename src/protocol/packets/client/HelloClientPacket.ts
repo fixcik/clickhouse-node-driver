@@ -1,6 +1,7 @@
-import ClientPacket, { ClientPacketTypes } from '../ClientPacket'
+import ClientPacket from '../ClientPacket'
 import { writeBinaryString } from '../../../writer'
 import { writeVarint } from '../../../varint'
+import { ClientPacketTypes } from '../../enums'
 
 interface HelloClientPacketData {
   clientName: string;

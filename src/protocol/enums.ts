@@ -1,3 +1,27 @@
+
+export enum ClientPacketTypes {
+  HELLO,
+  QUERY,
+  DATA,
+  CANCEL,
+  PING,
+  TABLES_STATUS_REQUEST
+}
+
+export enum ServerPacketTypes {
+  HELLO,
+  DATA,
+  EXCEPTION,
+  PROGRESS,
+  PONG,
+  END_OF_STREAM,
+  PROFILE_INFO,
+  TOTALS,
+  EXTREMES,
+  TABLES_STATUS_RESPONSE,
+  LOG,
+  TABLE_COLUMNS
+}
 export enum QueryProcessingStage {
     FETCH_COLUMNS = 0,
     WITH_MERGEABLE_STATE = 1,

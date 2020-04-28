@@ -2,21 +2,6 @@ import { NotImplementedError } from '../../exceptions'
 import Packet from '../Packet'
 import BufferedStreamReader from '../../BufferedStreamReader'
 
-export enum ServerPacketTypes {
-  HELLO,
-  DATA,
-  EXCEPTION,
-  PROGRESS,
-  PONG,
-  END_OF_STREAM,
-  PROFILE_INFO,
-  TOTALS,
-  EXTREMES,
-  TABLES_STATUS_RESPONSE,
-  LOG,
-  TABLE_COLUMNS
-}
-
 export default class ServerPacket<T> extends Packet {
   _readed = false;
   _data!: T;
