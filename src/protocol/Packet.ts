@@ -10,4 +10,8 @@ export default class Packet {
   get stream (): unknown {
     throw new NotImplementedError()
   }
+
+  get revision (): number {
+    return this.conn.serverInfo.revision
+  }
 }

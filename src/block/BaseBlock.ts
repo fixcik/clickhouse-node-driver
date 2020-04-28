@@ -1,5 +1,4 @@
 import { NotImplementedError } from '../exceptions'
-import { BlockInfoPacketData } from '../protocol/packets/client/BlockInfoPacket'
 
 export interface ColumntInfo {
   name: string;
@@ -8,14 +7,24 @@ export interface ColumntInfo {
 export interface BaseBlockOptions {
   data?: unknown[][];
   columns?: ColumntInfo[];
-  info?: BlockInfoPacketData;
+  info?: BlockInfo;
+}
+
+export class BlockInfo {
+  isOverflows: boolean;
+  bucketNum: number;
+
+  constructor ({ isOverflows = false, bucketNum = -1 } = {}) {
+    this.isOverflows = isOverflows
+    this.bucketNum = bucketNum
+  }
 }
 
 export default class BaseBlock {
   columns: ColumntInfo[]
   data: unknown[][]
-  info: BlockInfoPacketData
-  constructor ({ data = [], columns = [], info = {} }: BaseBlockOptions = {}) {
+  info: BlockInfo
+  constructor ({ data = [], columns = [], info = new BlockInfo() }: BaseBlockOptions = {}) {
     this.columns = columns
     this.data = this.normalize(data)
     this.info = info

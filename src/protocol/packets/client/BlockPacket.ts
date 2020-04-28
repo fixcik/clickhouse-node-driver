@@ -3,7 +3,7 @@ import BaseBlock from '../../../block/BaseBlock'
 import { writeVarint } from '../../../varint'
 import { writeBinaryString } from '../../../writer'
 import * as defines from '../../../defines'
-import BlockInfoPacket from './BlockInfoPacket'
+import BlockInfoClientPacket from './BlockInfoClientPacket'
 
 export interface BlockPacketData {
   block: BaseBlock;
@@ -12,7 +12,7 @@ export interface BlockPacketData {
 export default class BlockPacket extends ClientPacket<BlockPacketData> {
   _write ({ block }: BlockPacketData): void {
     if (this.conn.serverInfo.revision >= defines.DBMS_MIN_REVISION_WITH_BLOCK_INFO) {
-      const blockInfoPacket = new BlockInfoPacket(this.conn, block.info)
+      const blockInfoPacket = new BlockInfoClientPacket(this.conn, { info: block.info })
       blockInfoPacket.write()
     }
 

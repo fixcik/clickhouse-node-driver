@@ -1,5 +1,3 @@
-import { Writable } from 'stream'
-import { writeVarint } from './varint'
 import Client from './Client'
 
 const conn = new Client({ host: 'localhost', port: 32770, database: 'default' })

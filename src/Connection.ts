@@ -8,9 +8,9 @@ import ServerPacket, { ServerPacketTypes } from './protocol/packets/ServerPacket
 import { readVarUint } from './varint'
 import QueryPacket from './protocol/packets/client/QueryPacket'
 import { Compression } from './protocol'
-import BaseBlock from './block/BaseBlock'
 import RowOrientedBlock from './block/RowOrientedBlock'
-import DataPacket from './protocol/packets/client/DataPacket'
+import DataClientPacket from './protocol/packets/client/DataClientPacket'
+import DataServerPacket from './protocol/packets/server/DataServerPacket'
 
 export interface ConnectionOptions {
   host: string;
@@ -146,8 +146,11 @@ export default class Connection {
       case ServerPacketTypes.EXCEPTION:
         packet = new ExceptionPacket(this)
         break
+      case ServerPacketTypes.DATA:
+        packet = new DataServerPacket(this)
+        break
       default:
-        throw new Error('Unknown packet type')
+        throw new Error(`Unknown packet type ${packetType}`)
     }
     await packet.read()
     return packet
@@ -191,7 +194,7 @@ export default class Connection {
   }
 
   sendData (block: RowOrientedBlock, tableName = ''): void {
-    const packet = new DataPacket(this, {
+    const packet = new DataClientPacket(this, {
       block,
       tableName
     })
@@ -199,10 +202,10 @@ export default class Connection {
   }
 
   sendExternalTables (tables = []): void {
-    for (const table of tables) {
-      // TODO: finish send external block
-      // this.sendData(new RowOrientedBlock(this, table.data))
-    }
+    // TODO: finish send external block
+    // for (const table of tables) {
+    //   this.sendData(new RowOrientedBlock(this, table.data))
+    // }
     this.sendData(new RowOrientedBlock())
   }
 
