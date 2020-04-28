@@ -26,11 +26,14 @@ export default class ClientPacket<T> extends Packet {
   }
 
   write (): void {
+    console.log(`=== START ${this.constructor.name} ===`)
     this.stream.cork()
-    if (this.type) {
+    if (typeof this.type !== 'undefined') {
+      console.log('write type')
       writeVarint(this.type, this.stream)
     }
     this._write(this._data)
+    console.log(`=== END ${this.constructor.name} ===`)
     this.stream.uncork()
   }
 

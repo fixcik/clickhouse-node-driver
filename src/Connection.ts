@@ -7,6 +7,10 @@ import ExceptionPacket from './protocol/packets/server/ExceptionPacket'
 import ServerPacket, { ServerPacketTypes } from './protocol/packets/ServerPacket'
 import { readVarUint } from './varint'
 import QueryPacket from './protocol/packets/client/QueryPacket'
+import { Compression } from './protocol'
+import BaseBlock from './block/BaseBlock'
+import RowOrientedBlock from './block/RowOrientedBlock'
+import DataPacket from './protocol/packets/client/DataPacket'
 
 export interface ConnectionOptions {
   host: string;
@@ -14,6 +18,7 @@ export interface ConnectionOptions {
   user?: string;
   password?: string;
   database: string;
+  compression?: boolean;
   connectionTimeout?: number;
   sendReceiveTimeout?: number;
   clientName?: string;
@@ -27,7 +32,11 @@ class ServerInfo {
   revision: number;
   timezone?: string;
   displayName?: string;
-  constructor ({ serverName, serverVersionMajor, serverVersionMinor, serverVersionPatch, serverRevision, serverTimezone, serverDisplayName }: HelloServerPacketData) {
+  constructor ({
+    serverName, serverVersionMajor, serverVersionMinor,
+    serverVersionPatch, serverRevision, serverTimezone,
+    serverDisplayName
+  }: HelloServerPacketData) {
     this.name = serverName
     this.versionMajor = serverVersionMajor
     this.versionMinor = serverVersionMinor
@@ -53,7 +62,16 @@ export default class Connection {
   readStream!: BufferedStreamReader
   serverInfo!: ServerInfo
 
-  constructor ({ host, port, database, user = 'default', password = '', sendReceiveTimeout = defines.DBMS_DEFAULT_TIMEOUT_SEC, connectionTimeout = defines.DBMS_DEFAULT_CONNECT_TIMEOUT_SEC, clientName = defines.CLIENT_NAME }: ConnectionOptions) {
+  compression: Compression
+
+  constructor ({
+    host, port, database,
+    user = 'default', password = '',
+    sendReceiveTimeout = defines.DBMS_DEFAULT_TIMEOUT_SEC,
+    connectionTimeout = defines.DBMS_DEFAULT_CONNECT_TIMEOUT_SEC,
+    clientName = defines.CLIENT_NAME,
+    compression = false
+  }: ConnectionOptions) {
     this.database = database
     this.host = host
     this.port = port
@@ -62,6 +80,12 @@ export default class Connection {
     this.connectionTimeout = connectionTimeout
     this.sendReceiveTimeout = sendReceiveTimeout
     this.clientName = `${defines.DBMS_NAME} ${clientName}`
+
+    if (compression) {
+      throw new Error('Compression not awailable')
+    } else {
+      this.compression = Compression.DISABLED
+    }
   }
 
   forceConnection (): void {
@@ -72,12 +96,12 @@ export default class Connection {
     }
   }
 
-  connect (): void{
+  async connect (): Promise<void> {
     if (this.connected) {
       this.disconnect()
     }
 
-    this._initConnection(this.host, this.port)
+    await this._initConnection(this.host, this.port)
   }
 
   async _initConnection (host: string, port: number): Promise<void> {
@@ -151,6 +175,7 @@ export default class Connection {
     if (packet instanceof HelloServerPacket) {
       this.serverInfo = new ServerInfo(packet.getData())
     } else if (packet instanceof ExceptionPacket) {
+      console.log('error...')
       throw packet.getException()
     } else {
       this.disconnect()
@@ -165,14 +190,38 @@ export default class Connection {
     // Do smth
   }
 
-  sendQuery (query: string, queryId?: string): void {
-    if (!this.connected) {
-      this.connect()
+  sendData (block: RowOrientedBlock, tableName = ''): void {
+    const packet = new DataPacket(this, {
+      block,
+      tableName
+    })
+    packet.write()
+  }
+
+  sendExternalTables (tables = []): void {
+    for (const table of tables) {
+      // TODO: finish send external block
+      // this.sendData(new RowOrientedBlock(this, table.data))
     }
+    this.sendData(new RowOrientedBlock())
+  }
+
+  async sendQuery (query: string, queryId?: string): Promise<void> {
+    if (!this.connected) {
+      await this.connect()
+    }
+    console.log(this.serverInfo)
     const packet = new QueryPacket(this, {
       query,
       queryId
     })
+
+    // // @ts-ignore
+    // this.socket.write = (buffer: string | Uint8Array, cb?: ((err?: Error | undefined) => void | undefined)): boolean => {
+    //   console.log('----> ', buffer)
+    //   return true
+    // }
     packet.write()
+    console.debug('Send query: ', query)
   }
 }

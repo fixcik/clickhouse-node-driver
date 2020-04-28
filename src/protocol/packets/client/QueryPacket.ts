@@ -1,12 +1,19 @@
 import ClientPacket, { ClientPacketTypes } from '../ClientPacket'
 import { writeBinaryString } from '../../../writer'
 import * as defines from '../../../defines'
-import ClientInfoPacket, { QueryKind } from './ClientInfoPacket'
+import ClientInfoPacket from './ClientInfoPacket'
 import { writeVarint } from '../../../varint'
+import { QueryProcessingStage } from '../..'
 
 export interface QueryPacketData {
     query: string;
     queryId?: string;
+}
+
+export enum QueryKind {
+  NO_QUERY = 0,
+  INITIAL_QUERY = 1,
+  SECONDARY_QUERY = 2
 }
 
 export default class QueryPacket extends ClientPacket<QueryPacketData> {
@@ -23,11 +30,16 @@ export default class QueryPacket extends ClientPacket<QueryPacketData> {
         clientInfo.write()
       }
 
-      //   write_settings(self.context.settings, self.fout)
+      // TODO: implement settings
+      // Settings are not awailable now
+      writeBinaryString('', this.stream)
 
-      //   writeVarint(QueryProcessingStage.COMPLETE, self.fout)
-      //   writeVarint(self.compression, self.fout)
+      console.log('complete')
+      writeVarint(QueryProcessingStage.COMPLETE, this.stream)
+      console.log('compression')
+      writeVarint(this.conn.compression, this.stream)
 
+      console.log('query')
       writeBinaryString(data.query, this.stream)
     }
 }

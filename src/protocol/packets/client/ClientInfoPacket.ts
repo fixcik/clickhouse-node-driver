@@ -3,12 +3,7 @@ import ClientPacket from '../ClientPacket'
 import * as defines from '../../../defines'
 import { writeBinaryUInt8, writeBinaryString } from '../../../writer'
 import { writeVarint } from '../../../varint'
-
-export enum QueryKind {
-    NO_QUERY = 0,
-    INITIAL_QUERY = 1,
-    SECONDARY_QUERY = 2
-}
+import { QueryKind } from './QueryPacket'
 
 export enum Interface {
     TCP = 1,

@@ -1,6 +1,7 @@
 import BufferedStreamReader from './BufferedStreamReader'
 
 export const writeVarint = (value: number, stream: NodeJS.WritableStream): void => {
+  console.log(`varint: ${value}`)
   value |= 0
   const result = []
   while (true) {

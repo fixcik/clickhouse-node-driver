@@ -1,7 +1,12 @@
+export enum QueryProcessingStage {
+    FETCH_COLUMNS = 0,
+    WITH_MERGEABLE_STATE = 1,
+    COMPLETE = 2
+}
 
 export enum Compression {
-  DISABLED,
-  ENABLED
+  DISABLED = 0,
+  ENABLED = 1
 }
 
 export enum CompressionMethod {
