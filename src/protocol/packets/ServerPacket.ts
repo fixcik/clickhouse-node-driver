@@ -1,6 +1,6 @@
 import { NotImplementedError } from '../../exceptions'
 import Packet from '../Packet'
-import BufferedStreamReader from '../../BufferedStreamReader'
+import { BufferedReader } from '../../BufferedStreamReader'
 
 export default class ServerPacket<T> extends Packet {
   _readed = false;
@@ -11,7 +11,7 @@ export default class ServerPacket<T> extends Packet {
     return this
   }
 
-  get stream (): BufferedStreamReader {
+  get stream (): BufferedReader {
     return this.conn.readStream
   }
 

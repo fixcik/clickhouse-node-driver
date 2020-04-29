@@ -1,32 +1,18 @@
-import { Writable } from 'stream'
+import { Socket } from 'net'
+import { NotImplementedError } from './exceptions'
 
-export default class BufferedStreamReader extends Writable {
+export class BufferedReader {
   buffer!: Buffer
   size!: number
   position = 0
-  readNext?: (error?: Error) => void
+  buffSize: number
 
-  _write (chunk: Buffer, _encoding: string, next: (error?: Error) => void): void {
-    this.readNext = next
-    // console.log(`Received chank, length=${chunk.length}`)
-    // console.log('<-', chunk.toString('utf-8'))
-    this.emit('data', chunk)
+  constructor (buffSize: number) {
+    this.buffSize = buffSize
   }
 
-  readBlock (): Promise<void> {
-    if (this.readNext) {
-      this.readNext()
-    }
-    return new Promise((resolve) => {
-      this.on('data', (chunk: Buffer) => {
-        this.buffer = chunk
-        this.size = chunk.length
-        if (chunk === null) {
-          throw new Error('Unexpected EOF while reading bytes')
-        }
-        resolve()
-      })
-    })
+  readBlock (size: number): Promise<void> {
+    throw new NotImplementedError()
   }
 
   async read (unread: number): Promise<Buffer> {
@@ -44,7 +30,7 @@ export default class BufferedStreamReader extends Writable {
 
     while (unread > 0) {
       if (position === size) {
-        await this.readBlock()
+        await this.readBlock(unread)
         position = 0
         buffer = this.buffer
         size = buffer.length
@@ -63,9 +49,35 @@ export default class BufferedStreamReader extends Writable {
 
   async readOne (): Promise<number> {
     if (!this.buffer || this.position === this.size) {
-      await this.readBlock()
+      await this.readBlock(1)
       this.position = 0
     }
     return this.buffer[this.position++]
+  }
+}
+
+export class BufferedSocketReader extends BufferedReader {
+  socket: Socket
+
+  constructor (socket: Socket, buffSize: number) {
+    super(buffSize)
+    this.socket = socket
+  }
+
+  readBlock (size: number): Promise<void> {
+    this.socket.resume()
+    return new Promise((resolve, reject) => {
+      this.socket.once('readable', () => {
+        this.buffer = this.socket.read(Math.min(this.buffSize, size, this.socket.readableLength))
+
+        if (this.buffer !== null) {
+          this.size = this.buffer.length
+          this.socket.pause()
+          resolve()
+        } else {
+          reject(new Error('Unexpected EOF while reading bytes'))
+        }
+      })
+    })
   }
 }

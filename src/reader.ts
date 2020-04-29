@@ -1,29 +1,29 @@
 import { readVarUint } from './varint'
-import BufferedStreamReader from './BufferedStreamReader'
+import { BufferedReader } from './BufferedStreamReader'
 
-export const readBinaryBytesFixedLength = (stream: BufferedStreamReader, length: number): Promise<Buffer> => {
+export const readBinaryBytesFixedLength = (stream: BufferedReader, length: number): Promise<Buffer> => {
   return stream.read(length)
 }
 
-export const readBinaryStringFixedLength = async (stream: BufferedStreamReader, length: number): Promise<string> => {
+export const readBinaryStringFixedLength = async (stream: BufferedReader, length: number): Promise<string> => {
   return (await readBinaryBytesFixedLength(stream, length)).toString('utf-8')
 }
 
-export const readBinaryString = async (stream: BufferedStreamReader): Promise<string> => {
+export const readBinaryString = async (stream: BufferedReader): Promise<string> => {
   const length = await readVarUint(stream)
   return await readBinaryStringFixedLength(stream, length)
 }
 
-export const readBinaryInt = async (stream: BufferedStreamReader, size: number, unsigned = false): Promise<number> => {
+export const readBinaryInt = async (stream: BufferedReader, size: number, unsigned = false): Promise<number> => {
   const buffer = await stream.read(size)
   return buffer[unsigned ? 'readUIntLE' : 'readIntLE'](0, size)
 }
 
-export const readBinaryInt32 = (stream: BufferedStreamReader): Promise<number> => {
+export const readBinaryInt32 = (stream: BufferedReader): Promise<number> => {
   return readBinaryInt(stream, 4)
 }
 
-export const readBinaryUInt8 = (stream: BufferedStreamReader): Promise<number> => {
+export const readBinaryUInt8 = (stream: BufferedReader): Promise<number> => {
   return readBinaryInt(stream, 1, true)
 }
 

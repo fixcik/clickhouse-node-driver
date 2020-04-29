@@ -1,4 +1,4 @@
-import BufferedStreamReader from './BufferedStreamReader'
+import { BufferedReader } from './BufferedStreamReader'
 
 export const writeVarint = (value: number, stream: NodeJS.WritableStream): void => {
   value |= 0
@@ -18,7 +18,7 @@ export const writeVarint = (value: number, stream: NodeJS.WritableStream): void 
   stream.write(Buffer.from(result))
 }
 
-export const readVarUint = async (stream: BufferedStreamReader): Promise<number> => {
+export const readVarUint = async (stream: BufferedReader): Promise<number> => {
   let result = 0
   let shift = 0
   const butes = []

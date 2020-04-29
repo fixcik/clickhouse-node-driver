@@ -1,6 +1,6 @@
 import { Socket } from 'net'
 import * as defines from './defines'
-import BufferedStreamReader from './BufferedStreamReader'
+import { BufferedReader, BufferedSocketReader } from './BufferedStreamReader'
 import HelloClientPacket from './protocol/packets/client/HelloClientPacket'
 import HelloServerPacket, { HelloServerPacketData } from './protocol/packets/server/HelloServerPacket'
 import ExceptionPacket from './protocol/packets/server/ExceptionPacket'
@@ -59,7 +59,7 @@ export default class Connection {
   clientName: string
   socket!: Socket
 
-  readStream!: BufferedStreamReader
+  readStream!: BufferedReader
   serverInfo!: ServerInfo
 
   compression: Compression
@@ -111,12 +111,11 @@ export default class Connection {
     return new Promise((resolve, reject) => {
       socket.on('connect', async () => {
         this.connected = true
-
-        this.readStream = new BufferedStreamReader()
-        socket.pipe(this.readStream)
+        this.readStream = new BufferedSocketReader(socket, defines.BUFFER_SIZE)
 
         try {
           this._sendHello()
+          console.log('readHello')
           await this._readHello()
           resolve()
         } catch (e) {
