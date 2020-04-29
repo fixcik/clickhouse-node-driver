@@ -178,7 +178,6 @@ export default class Connection {
     if (packet instanceof HelloServerPacket) {
       this.serverInfo = new ServerInfo(packet.getData())
     } else if (packet instanceof ExceptionPacket) {
-      console.log('error...')
       throw packet.getException()
     } else {
       this.disconnect()
@@ -213,7 +212,6 @@ export default class Connection {
     if (!this.connected) {
       await this.connect()
     }
-    console.log(this.serverInfo)
     const packet = new QueryPacket(this, {
       query,
       queryId

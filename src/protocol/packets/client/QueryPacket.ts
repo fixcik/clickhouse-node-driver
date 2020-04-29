@@ -34,12 +34,8 @@ export default class QueryPacket extends ClientPacket<QueryPacketData> {
       // Settings are not awailable now
       writeBinaryString('', this.stream)
 
-      console.log('complete')
       writeVarint(QueryProcessingStage.COMPLETE, this.stream)
-      console.log('compression')
       writeVarint(this.conn.compression, this.stream)
-
-      console.log('query')
       writeBinaryString(data.query, this.stream)
     }
 }

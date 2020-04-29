@@ -16,7 +16,6 @@ interface HelloClientPacketData {
 export default class HelloClientPacket extends ClientPacket<HelloClientPacketData> {
   type = ClientPacketTypes.HELLO
   _write (data: HelloClientPacketData): void {
-    console.log(data)
     writeBinaryString(data.clientName, this.stream)
     writeVarint(data.clientMajorVersion, this.stream)
     writeVarint(data.clientMinorVersion, this.stream)

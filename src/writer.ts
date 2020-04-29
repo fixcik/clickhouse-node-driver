@@ -8,7 +8,6 @@ export const writeBinaryBytes = (buff: Buffer, stream: NodeJS.WritableStream): v
 }
 
 export const writeBinaryString = (text: string, stream: NodeJS.WritableStream): void => {
-  console.log(`write binary string '${text}'`)
   const buff = Buffer.from(text, 'utf-8')
   writeBinaryBytes(buff, stream)
 }
@@ -20,7 +19,6 @@ const packInt = (number: number, size: number, unsigned = false): Buffer => {
 }
 
 export const writeBinaryUInt8 = (number: number, stream: NodeJS.WritableStream): void => {
-  console.log('uint8', packInt(number, 1, true))
   stream.write(packInt(number, 1, true))
 }
 

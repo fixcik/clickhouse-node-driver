@@ -8,8 +8,8 @@ export default class BufferedStreamReader extends Writable {
 
   _write (chunk: Buffer, _encoding: string, next: (error?: Error) => void): void {
     this.readNext = next
-    console.log(`Received chank, length=${chunk.length}`)
-    console.log('<-', chunk.toString('utf-8'))
+    // console.log(`Received chank, length=${chunk.length}`)
+    // console.log('<-', chunk.toString('utf-8'))
     this.emit('data', chunk)
   }
 
@@ -17,7 +17,6 @@ export default class BufferedStreamReader extends Writable {
     if (this.readNext) {
       this.readNext()
     }
-    console.log('Read block')
     return new Promise((resolve) => {
       this.on('data', (chunk: Buffer) => {
         this.buffer = chunk

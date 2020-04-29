@@ -1,26 +1,26 @@
 
 export enum ClientPacketTypes {
-  HELLO,
-  QUERY,
-  DATA,
-  CANCEL,
-  PING,
-  TABLES_STATUS_REQUEST
+  HELLO = 0,
+  QUERY = 1,
+  DATA = 2,
+  CANCEL = 3,
+  PING = 4,
+  TABLES_STATUS_REQUEST = 5
 }
 
 export enum ServerPacketTypes {
-  HELLO,
-  DATA,
-  EXCEPTION,
-  PROGRESS,
-  PONG,
-  END_OF_STREAM,
-  PROFILE_INFO,
-  TOTALS,
-  EXTREMES,
-  TABLES_STATUS_RESPONSE,
-  LOG,
-  TABLE_COLUMNS
+  HELLO = 0,
+  DATA = 1,
+  EXCEPTION = 2,
+  PROGRESS = 3,
+  PONG = 4,
+  END_OF_STREAM = 5,
+  PROFILE_INFO = 6,
+  TOTALS = 7,
+  EXTREMES = 8,
+  TABLES_STATUS_RESPONSE = 9,
+  LOG = 10,
+  TABLE_COLUMNS = 11
 }
 export enum QueryProcessingStage {
     FETCH_COLUMNS = 0,

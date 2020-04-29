@@ -4,9 +4,13 @@ import { readBinaryString } from '../../../reader'
 import BlockInfoServerPacket from './BlockInfoServerPacket'
 import { BlockInfo } from '../../../block/BaseBlock'
 import { readVarUint } from '../../../varint'
+import { readColumn } from '../../../column'
+import { ColumntInfo } from '../../../typings'
+import ColumnOrientedBlock from '../../../block/ColumnOrientedBlock'
 
 export interface DataServerPacketData {
   info: BlockInfo;
+  block: ColumnOrientedBlock;
 }
 export default class DataServerPacket extends ServerPacket<DataServerPacketData> {
   async _read (): Promise<DataServerPacketData> {
@@ -25,18 +29,27 @@ export default class DataServerPacket extends ServerPacket<DataServerPacketData>
 
     const colCount = await readVarUint(this.stream)
     const rowCount = await readVarUint(this.stream)
+    const columns = []
+    const data = []
 
     for (let i = 0; i < colCount; i++) {
-      const columnName = await readBinaryString(this.stream)
-      const columnType = await readBinaryString(this.stream)
-
-      console.log(`${columnName} ${columnType}`)
+      const column: ColumntInfo = {
+        name: await readBinaryString(this.stream),
+        type: await readBinaryString(this.stream)
+      }
+      columns.push(column)
+      data.push(await readColumn(this.conn, column, rowCount))
     }
 
-    console.log(`Counts: ${colCount} cols, ${rowCount} rows`)
+    const block = new ColumnOrientedBlock({
+      data,
+      columns,
+      info
+    })
 
     return {
-      info
+      info,
+      block
     }
   }
 }

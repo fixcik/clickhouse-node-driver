@@ -1,4 +1,5 @@
 import Connection, { ConnectionOptions } from './Connection'
+import DataServerPacket from './protocol/packets/server/DataServerPacket'
 
 export type ClientOptions = ConnectionOptions
 
@@ -11,7 +12,14 @@ export default class Client {
   async processOrdinaryQuery (query: string) {
     await this.connection.sendQuery(query)
     this.connection.sendExternalTables()
-    await this.connection.readPacket()
-    console.log('data')
+    const data = await this.connection.readPacket()
+    // @ts-ignore
+    console.log(data.getData().block)
+    const data2 = await this.connection.readPacket()
+    // @ts-ignore
+    console.log(data2.getData().block)
+    const data3 = await this.connection.readPacket()
+    // @ts-ignore
+    console.log(data3.getData().block)
   }
 }

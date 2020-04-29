@@ -1,9 +1,6 @@
 import { NotImplementedError } from '../exceptions'
+import { ColumntInfo } from '../typings'
 
-export interface ColumntInfo {
-  name: string;
-  type: string;
-}
 export interface BaseBlockOptions {
   data?: unknown[][];
   columns?: ColumntInfo[];
