@@ -3,7 +3,7 @@ import * as defines from '../../defines'
 import ClientInfoPacket from './ClientInfoPacket'
 import { writeVarint } from '../../varint'
 import { QueryProcessingStage, ClientPacketTypes } from '../enums'
-import { ClientPacket } from '../packet'
+import { ClientPacket } from '../_packet'
 
 export interface QueryPacketData {
     query: string;

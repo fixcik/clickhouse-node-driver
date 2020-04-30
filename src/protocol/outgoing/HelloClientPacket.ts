@@ -1,7 +1,7 @@
 import { writeBinaryString } from '../../writer'
 import { writeVarint } from '../../varint'
 import { ClientPacketTypes } from '../enums'
-import { ClientPacket } from '../packet'
+import { ClientPacket } from '../_packet'
 
 interface HelloClientPacketData {
   clientName: string;

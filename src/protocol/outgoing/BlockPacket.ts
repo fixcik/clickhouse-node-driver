@@ -2,7 +2,7 @@ import { writeVarint } from '../../varint'
 import { writeBinaryString } from '../../writer'
 import * as defines from '../../defines'
 import BlockInfoClientPacket from './BlockInfoClientPacket'
-import { ClientPacket } from '../packet'
+import { ClientPacket } from '../_packet'
 import { BaseBlock } from '../../block'
 
 export interface BlockPacketData {

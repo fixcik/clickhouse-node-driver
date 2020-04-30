@@ -1,5 +1,4 @@
 import Connection, { ConnectionOptions } from './сonnection'
-import DataServerPacket from './protocol/incoming/DataServerPacket'
 
 export type ClientOptions = ConnectionOptions
 

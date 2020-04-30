@@ -2,7 +2,7 @@ import * as defines from '../../defines'
 import { writeBinaryString } from '../../writer'
 import BlockPacket from './BlockPacket'
 import { ClientPacketTypes } from '../enums'
-import { ClientPacket } from '../packet'
+import { ClientPacket } from '../_packet'
 import { BaseBlock } from '../../block'
 
 export interface DataClientPacketData {
