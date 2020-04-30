@@ -1,4 +1,4 @@
-import Connection from '../Connection'
+import Connection from '../сonnection'
 import { NotImplementedError } from '../exceptions'
 
 export default class Column {

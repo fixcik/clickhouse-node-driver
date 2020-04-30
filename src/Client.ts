@@ -1,5 +1,5 @@
-import Connection, { ConnectionOptions } from './Connection'
-import DataServerPacket from './protocol/packets/server/DataServerPacket'
+import Connection, { ConnectionOptions } from './сonnection'
+import DataServerPacket from './protocol/incoming/DataServerPacket'
 
 export type ClientOptions = ConnectionOptions
 

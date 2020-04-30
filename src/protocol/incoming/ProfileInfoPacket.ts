@@ -1,6 +1,6 @@
-import ServerPacket from '../ServerPacket'
-import { readVarUint } from '../../../varint'
-import { readBinaryUInt8 } from '../../../reader'
+import { readVarUint } from '../../varint'
+import { readBinaryUInt8 } from '../../reader'
+import { ServerPacket } from '../packet'
 
 export interface ProfileInfoPacketData {
     rows: number;

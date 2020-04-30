@@ -1,9 +1,9 @@
-import ClientPacket from '../ClientPacket'
-import BaseBlock from '../../../block/BaseBlock'
-import { writeVarint } from '../../../varint'
-import { writeBinaryString } from '../../../writer'
-import * as defines from '../../../defines'
+import BaseBlock from '../../block/BaseBlock'
+import { writeVarint } from '../../varint'
+import { writeBinaryString } from '../../writer'
+import * as defines from '../../defines'
 import BlockInfoClientPacket from './BlockInfoClientPacket'
+import { ClientPacket } from '../packet'
 
 export interface BlockPacketData {
   block: BaseBlock;

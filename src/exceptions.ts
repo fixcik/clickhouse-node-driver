@@ -1,4 +1,4 @@
-import { ExceptionPacketData } from './protocol/packets/server/ExceptionPacket'
+import { ExceptionPacketData } from './protocol/incoming/ExceptionPacket'
 
 export class NotImplementedError extends Error {}
 export class DbException extends Error {

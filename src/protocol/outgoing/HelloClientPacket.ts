@@ -1,7 +1,7 @@
-import ClientPacket from '../ClientPacket'
-import { writeBinaryString } from '../../../writer'
-import { writeVarint } from '../../../varint'
-import { ClientPacketTypes } from '../../enums'
+import { writeBinaryString } from '../../writer'
+import { writeVarint } from '../../varint'
+import { ClientPacketTypes } from '../enums'
+import { ClientPacket } from '../packet'
 
 interface HelloClientPacketData {
   clientName: string;

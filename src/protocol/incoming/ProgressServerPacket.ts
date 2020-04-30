@@ -1,6 +1,6 @@
-import ServerPacket from '../ServerPacket'
-import { readVarUint } from '../../../varint'
-import * as defines from '../../../defines'
+import { ServerPacket } from '../packet'
+import { readVarUint } from '../../varint'
+import * as defines from '../../defines'
 
 export interface ProgressServerPacketData {
     rows: number;

@@ -1,7 +1,7 @@
 import { ColumntInfo } from './typings'
-import Column from './columns/Column'
-import Connection from './Connection'
-import { UInt8Column, UInt16Column, UInt32Column } from './columns/IntColumn'
+import Column from './columns/column'
+import Connection from './сonnection'
+import { UInt8Column, UInt16Column, UInt32Column } from './columns/int'
 
 const columns = [UInt8Column, UInt16Column, UInt32Column]
 const columnByType: {

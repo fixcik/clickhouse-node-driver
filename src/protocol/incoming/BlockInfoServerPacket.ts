@@ -1,7 +1,7 @@
-import { readBinaryInt32, readBinaryUInt8 } from './../../../reader'
-import ServerPacket from '../ServerPacket'
-import { readVarUint } from '../../../varint'
-import { BlockInfo } from '../../../block/BaseBlock'
+import { ServerPacket } from '../packet'
+import { readBinaryInt32, readBinaryUInt8 } from '../../reader'
+import { readVarUint } from '../../varint'
+import { BlockInfo } from '../../block/BaseBlock'
 
 export interface BlockInfoServerPacketData {
   info: BlockInfo;

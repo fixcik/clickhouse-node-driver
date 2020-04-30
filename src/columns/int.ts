@@ -1,6 +1,6 @@
-import Column from './Column'
+import Column from './column'
 import { readBinaryInt } from '../reader'
-import Connection from '../Connection'
+import Connection from '../сonnection'
 
 class IntColumn extends Column {
   intSize = 0

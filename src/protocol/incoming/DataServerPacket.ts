@@ -1,12 +1,12 @@
-import ServerPacket from '../ServerPacket'
-import * as defines from '../../../defines'
-import { readBinaryString } from '../../../reader'
+import * as defines from '../../defines'
+import { readBinaryString } from '../../reader'
 import BlockInfoServerPacket from './BlockInfoServerPacket'
-import { BlockInfo } from '../../../block/BaseBlock'
-import { readVarUint } from '../../../varint'
-import { readColumn } from '../../../column'
-import { ColumntInfo } from '../../../typings'
-import ColumnOrientedBlock from '../../../block/ColumnOrientedBlock'
+import { BlockInfo } from '../../block/BaseBlock'
+import { readVarUint } from '../../varint'
+import { readColumn } from '../../column'
+import { ColumntInfo } from '../../typings'
+import ColumnOrientedBlock from '../../block/ColumnOrientedBlock'
+import { ServerPacket } from '../packet'
 
 export interface DataServerPacketData {
   info: BlockInfo;

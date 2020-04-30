@@ -1,5 +1,5 @@
 import { readVarUint } from './varint'
-import { BufferedReader } from './BufferedStreamReader'
+import { BufferedReader } from './buffered_reader'
 
 export const readBinaryBytesFixedLength = (stream: BufferedReader, length: number): Promise<Buffer> => {
   return stream.read(length)

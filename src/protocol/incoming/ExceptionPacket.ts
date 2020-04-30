@@ -1,6 +1,6 @@
-import ServerPacket from '../ServerPacket'
-import { readBinaryString, readBinaryInt32, readBinaryUInt8 } from '../../../reader'
-import { DbException } from '../../../exceptions'
+import { readBinaryString, readBinaryInt32, readBinaryUInt8 } from '../../reader'
+import { DbException } from '../../exceptions'
+import { ServerPacket } from '../packet'
 
 export interface ExceptionPacketData {
     code: number;

@@ -1,9 +1,9 @@
-import ClientPacket from '../ClientPacket'
-import { writeBinaryString } from '../../../writer'
-import * as defines from '../../../defines'
+import { writeBinaryString } from '../../writer'
+import * as defines from '../../defines'
 import ClientInfoPacket from './ClientInfoPacket'
-import { writeVarint } from '../../../varint'
-import { QueryProcessingStage, ClientPacketTypes } from '../../enums'
+import { writeVarint } from '../../varint'
+import { QueryProcessingStage, ClientPacketTypes } from '../enums'
+import { ClientPacket } from '../packet'
 
 export interface QueryPacketData {
     query: string;

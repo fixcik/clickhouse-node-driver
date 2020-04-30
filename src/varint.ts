@@ -1,4 +1,4 @@
-import { BufferedReader } from './BufferedStreamReader'
+import { BufferedReader } from './buffered_reader'
 
 export const writeVarint = (value: number, stream: NodeJS.WritableStream): void => {
   value |= 0
