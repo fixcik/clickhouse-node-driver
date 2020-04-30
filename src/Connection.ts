@@ -11,6 +11,8 @@ import { Compression, ServerPacketTypes } from './protocol/enums'
 import RowOrientedBlock from './block/RowOrientedBlock'
 import DataClientPacket from './protocol/packets/client/DataClientPacket'
 import DataServerPacket from './protocol/packets/server/DataServerPacket'
+import ProfileInfoPacket from './protocol/packets/server/ProfileInfoPacket'
+import ProgressServerPacket from './protocol/packets/server/ProgressServerPacket'
 
 export interface ConnectionOptions {
   host: string;
@@ -115,8 +117,8 @@ export default class Connection {
 
         try {
           this._sendHello()
-          console.log('readHello')
           await this._readHello()
+          console.log('connected')
           resolve()
         } catch (e) {
           reject(e)
@@ -148,10 +150,17 @@ export default class Connection {
       case ServerPacketTypes.DATA:
         packet = new DataServerPacket(this)
         break
+      case ServerPacketTypes.PROFILE_INFO:
+        packet = new ProfileInfoPacket(this)
+        break
+      case ServerPacketTypes.PROGRESS:
+        packet = new ProgressServerPacket(this)
+        break
       default:
         throw new Error(`Unknown packet type ${packetType}`)
     }
     await packet.read()
+    console.log(packet.getData())
     return packet
   }
 

@@ -20,6 +20,6 @@ export default class Client {
     console.log(data2.getData().block)
     const data3 = await this.connection.readPacket()
     // @ts-ignore
-    console.log(data3.getData().block)
+    console.log(data3.getData())
   }
 }
