@@ -1,4 +1,4 @@
-import { ServerPacket } from '../_packet'
+import { ServerPacket } from '../packet'
 import { readBinaryInt32, readBinaryUInt8 } from '../../reader'
 import { readVarUint } from '../../varint'
 import { BlockInfo } from '../../block'

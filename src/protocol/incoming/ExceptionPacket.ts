@@ -1,6 +1,6 @@
 import { readBinaryString, readBinaryInt32, readBinaryUInt8 } from '../../reader'
 import { DbException } from '../../exceptions'
-import { ServerPacket } from '../_packet'
+import { ServerPacket } from '../packet'
 
 export interface ExceptionPacketData {
     code: number;

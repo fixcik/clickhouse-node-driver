@@ -1,5 +1,5 @@
 import { ColumntInfo } from './typings'
-import Column from './columns/_column'
+import Column from './columns/column'
 import Connection from './сonnection'
 import { UInt8Column, UInt16Column, UInt32Column } from './columns/int'
 

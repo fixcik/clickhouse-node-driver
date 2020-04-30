@@ -3,7 +3,7 @@ import * as defines from '../../defines'
 import { writeBinaryUInt8, writeBinaryString } from '../../writer'
 import { writeVarint } from '../../varint'
 import { QueryKind } from './QueryPacket'
-import { ClientPacket } from '../_packet'
+import { ClientPacket } from '../packet'
 
 export enum Interface {
     TCP = 1,

@@ -1,4 +1,4 @@
-import Column from './_column'
+import Column from './column'
 import { readBinaryInt } from '../reader'
 import Connection from '../сonnection'
 

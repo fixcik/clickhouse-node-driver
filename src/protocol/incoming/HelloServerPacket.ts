@@ -1,7 +1,7 @@
 import { readBinaryString } from '../../reader'
 import { readVarUint } from '../../varint'
 import { DBMS_MIN_REVISION_WITH_SERVER_TIMEZONE, DBMS_MIN_REVISION_WITH_SERVER_DISPLAY_NAME, DBMS_MIN_REVISION_WITH_VERSION_PATCH } from '../../defines'
-import { ServerPacket } from '../_packet'
+import { ServerPacket } from '../packet'
 
 export interface HelloServerPacketData {
   serverName: string;

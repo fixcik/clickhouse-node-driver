@@ -11,7 +11,7 @@ import DataClientPacket from './protocol/outgoing/DataClientPacket'
 import DataServerPacket from './protocol/incoming/DataServerPacket'
 import ProfileInfoPacket from './protocol/incoming/ProfileInfoPacket'
 import ProgressServerPacket from './protocol/incoming/ProgressServerPacket'
-import { ServerPacket } from './protocol/_packet'
+import { ServerPacket } from './protocol/packet'
 import { RowOrientedBlock } from './block'
 
 export interface ConnectionOptions {

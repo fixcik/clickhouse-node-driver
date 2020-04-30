@@ -5,7 +5,7 @@ import BlockInfoServerPacket from './BlockInfoServerPacket'
 import { readVarUint } from '../../varint'
 import { readColumn } from '../../column'
 import { ColumntInfo } from '../../typings'
-import { ServerPacket } from '../_packet'
+import { ServerPacket } from '../packet'
 
 export interface DataServerPacketData {
   info: BlockInfo;

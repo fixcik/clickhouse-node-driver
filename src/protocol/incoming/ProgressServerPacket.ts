@@ -1,4 +1,4 @@
-import { ServerPacket } from '../_packet'
+import { ServerPacket } from '../packet'
 import { readVarUint } from '../../varint'
 import * as defines from '../../defines'
 
