@@ -1,7 +1,7 @@
 import { ServerPacket } from '../packet'
 import { readBinaryInt32, readBinaryUInt8 } from '../../reader'
 import { readVarUint } from '../../varint'
-import { BlockInfo } from '../../block/BaseBlock'
+import { BlockInfo } from '../../block'
 
 export interface BlockInfoServerPacketData {
   info: BlockInfo;

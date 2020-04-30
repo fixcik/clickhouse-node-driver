@@ -1,9 +1,9 @@
-import BaseBlock from '../../block/BaseBlock'
 import * as defines from '../../defines'
 import { writeBinaryString } from '../../writer'
 import BlockPacket from './BlockPacket'
 import { ClientPacketTypes } from '../enums'
 import { ClientPacket } from '../packet'
+import { BaseBlock } from '../../block'
 
 export interface DataClientPacketData {
   block: BaseBlock;

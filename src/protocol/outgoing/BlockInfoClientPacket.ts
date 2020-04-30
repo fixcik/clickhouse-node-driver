@@ -1,7 +1,7 @@
 import { writeVarint } from '../../varint'
 import { writeBinaryUInt8, writeBinaryInt32 } from '../../writer'
-import { BlockInfo } from '../../block/BaseBlock'
 import { ClientPacket } from '../packet'
+import { BlockInfo } from '../../block'
 
 export interface BlockInfoClientPacketData {
   info: BlockInfo;
