@@ -1,17 +1,35 @@
-import { ColumnOrientedBlock, BlockInfo } from './../../block'
 import * as defines from '../../defines'
-import { readBinaryString } from '../../reader'
-import BlockInfoServerPacket from './BlockInfoServerPacket'
-import { readVarUint } from '../../varint'
+import { writeBinaryString } from '../../writer'
+import { ClientPacketTypes } from '../enums'
+import { ClientPacket, ServerPacket } from '../packet'
+import { BaseBlock, ColumnOrientedBlock, BlockInfo } from '../../block'
 import { readColumn } from '../../column'
+import { readBinaryString } from '../../reader'
 import { ColumntInfo } from '../../typings'
-import { ServerPacket } from '../packet'
+import { readVarUint } from '../../varint'
+import { BlockInfoServerPacket, BlockPacket } from './block'
 
-export interface DataServerPacketData {
-  info: BlockInfo;
-  block: ColumnOrientedBlock;
+export interface DataClientPacketData {
+  block: BaseBlock;
+  tableName: string;
 }
-export default class DataServerPacket extends ServerPacket<DataServerPacketData> {
+export class DataClientPacket extends ClientPacket<DataClientPacketData> {
+  type = ClientPacketTypes.DATA
+
+  _write ({ block, tableName }: DataClientPacketData): void {
+    if (this.conn.serverInfo.revision >= defines.DBMS_MIN_REVISION_WITH_TEMPORARY_TABLES) {
+      writeBinaryString(tableName, this.stream)
+    }
+    const blockPacket = new BlockPacket(this.conn, { block })
+    blockPacket.write()
+  }
+}
+export interface DataServerPacketData {
+    info: BlockInfo;
+    block: ColumnOrientedBlock;
+}
+
+export class DataServerPacket extends ServerPacket<DataServerPacketData> {
   async _read (): Promise<DataServerPacketData> {
     if (this.revision >= defines.DBMS_MIN_REVISION_WITH_TEMPORARY_TABLES) {
       await readBinaryString(this.stream)

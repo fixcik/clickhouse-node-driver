@@ -10,7 +10,7 @@ export interface ProgressServerPacketData {
     writtenBytes?: number;
 }
 
-export default class ProgressServerPacket extends ServerPacket<ProgressServerPacketData> {
+export class ProgressServerPacket extends ServerPacket<ProgressServerPacketData> {
   async _read (): Promise<ProgressServerPacketData> {
     const rows = await readVarUint(this.stream)
     const bytes = await readVarUint(this.stream)

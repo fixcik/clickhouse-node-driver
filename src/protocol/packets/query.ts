@@ -1,9 +1,9 @@
 import { writeBinaryString } from '../../writer'
 import * as defines from '../../defines'
-import ClientInfoPacket from './ClientInfoPacket'
 import { writeVarint } from '../../varint'
 import { QueryProcessingStage, ClientPacketTypes } from '../enums'
 import { ClientPacket } from '../packet'
+import { ClientInfoPacket } from './client_info'
 
 export interface QueryPacketData {
     query: string;
@@ -16,7 +16,7 @@ export enum QueryKind {
   SECONDARY_QUERY = 2
 }
 
-export default class QueryPacket extends ClientPacket<QueryPacketData> {
+export class QueryPacket extends ClientPacket<QueryPacketData> {
     type = ClientPacketTypes.QUERY
     _write (data: QueryPacketData): void {
       writeBinaryString(data.queryId || '', this.stream)

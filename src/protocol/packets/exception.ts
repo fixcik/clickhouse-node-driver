@@ -10,7 +10,7 @@ export interface ExceptionPacketData {
     nested?: ExceptionPacketData;
 }
 
-export default class ExceptionPacket extends ServerPacket<ExceptionPacketData> {
+export class ExceptionPacket extends ServerPacket<ExceptionPacketData> {
   async _read (): Promise<ExceptionPacketData> {
     const code = await readBinaryInt32(this.stream)
     const name = await readBinaryString(this.stream)

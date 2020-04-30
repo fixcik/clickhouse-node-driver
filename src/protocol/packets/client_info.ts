@@ -2,8 +2,8 @@ import os from 'os'
 import * as defines from '../../defines'
 import { writeBinaryUInt8, writeBinaryString } from '../../writer'
 import { writeVarint } from '../../varint'
-import { QueryKind } from './QueryPacket'
 import { ClientPacket } from '../packet'
+import { QueryKind } from './query'
 
 export enum Interface {
     TCP = 1,
@@ -15,7 +15,7 @@ export interface ClientInfoPacketData {
     queryKind: QueryKind;
 }
 
-export default class ClientInfoPacket extends ClientPacket<ClientInfoPacketData> {
+export class ClientInfoPacket extends ClientPacket<ClientInfoPacketData> {
   initialUser = ''
   initialQueryId = ''
   initialAddress = '0.0.0.0:0'

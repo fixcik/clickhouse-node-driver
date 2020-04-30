@@ -10,7 +10,7 @@ export interface ProfileInfoPacketData {
     rowsBeforeLimit: number;
     calculatedRowsBeforeLimit: number;
 }
-export default class ProfileInfoPacket extends ServerPacket<ProfileInfoPacketData> {
+export class ProfileInfoPacket extends ServerPacket<ProfileInfoPacketData> {
   async _read (): Promise<ProfileInfoPacketData> {
     return {
       rows: await readVarUint(this.stream),
