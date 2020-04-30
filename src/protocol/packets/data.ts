@@ -69,4 +69,12 @@ export class DataServerPacket extends ServerPacket<DataServerPacketData> {
       block
     }
   }
+
+  getBlock (): ColumnOrientedBlock {
+    return this._data.block
+  }
+
+  getInfo (): BlockInfo {
+    return this._data.info
+  }
 }

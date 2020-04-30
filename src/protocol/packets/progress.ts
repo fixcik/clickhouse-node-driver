@@ -2,7 +2,7 @@ import { ServerPacket } from '../packet'
 import { readVarUint } from '../../varint'
 import * as defines from '../../defines'
 
-export interface ProgressServerPacketData {
+export interface ProgressPacketData {
     rows: number;
     bytes: number;
     totalRows?: number;
@@ -10,8 +10,8 @@ export interface ProgressServerPacketData {
     writtenBytes?: number;
 }
 
-export class ProgressServerPacket extends ServerPacket<ProgressServerPacketData> {
-  async _read (): Promise<ProgressServerPacketData> {
+export class ProgressPacket extends ServerPacket<ProgressPacketData> {
+  async _read (): Promise<ProgressPacketData> {
     const rows = await readVarUint(this.stream)
     const bytes = await readVarUint(this.stream)
 

@@ -3,13 +3,13 @@ import * as defines from './defines'
 import { BufferedReader, BufferedSocketReader } from './buffered_reader'
 import { readVarUint } from './varint'
 import { Compression, ServerPacketTypes } from './protocol/enums'
-import { ServerPacket } from './protocol/packet'
+import { ServerPacket, EndOfStreamPacket } from './protocol/packet'
 import { RowOrientedBlock } from './block'
 import { HelloServerPacketData, HelloServerPacket, HelloClientPacket } from './protocol/packets/hello'
 import { DataClientPacket, DataServerPacket } from './protocol/packets/data'
 import { ExceptionPacket } from './protocol/packets/exception'
 import { ProfileInfoPacket } from './protocol/packets/profile'
-import { ProgressServerPacket } from './protocol/packets/progress'
+import { ProgressPacket } from './protocol/packets/progress'
 import { QueryPacket } from './protocol/packets/query'
 
 export interface ConnectionOptions {
@@ -152,13 +152,14 @@ export default class Connection {
         packet = new ProfileInfoPacket(this)
         break
       case ServerPacketTypes.PROGRESS:
-        packet = new ProgressServerPacket(this)
+        packet = new ProgressPacket(this)
         break
+      case ServerPacketTypes.END_OF_STREAM:
+        return new EndOfStreamPacket(this)
       default:
         throw new Error(`Unknown packet type ${packetType}`)
     }
     await packet.read()
-    console.log(packet.getData())
     return packet
   }
 

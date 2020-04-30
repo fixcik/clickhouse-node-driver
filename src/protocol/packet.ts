@@ -1,9 +1,10 @@
 import Connection from '../сonnection'
 import { NotImplementedError } from '../exceptions'
-import { ClientPacketTypes } from './enums'
-import { writeVarint } from '../varint'
+import { ClientPacketTypes, ServerPacketTypes } from './enums'
+import { writeVarint, readVarUint } from '../varint'
 import { Writable } from 'stream'
 import { BufferedReader } from '../buffered_reader'
+import { Server } from 'http'
 
 export class Packet {
   conn: Connection
@@ -50,6 +51,7 @@ export class ClientPacket<T> extends Packet {
 export class ServerPacket<T> extends Packet {
   _readed = false;
   _data!: T;
+
   async read (): Promise<this> {
     this._data = await this._read()
     this._readed = true
@@ -71,3 +73,5 @@ export class ServerPacket<T> extends Packet {
     return this._data
   }
 }
+
+export class EndOfStreamPacket extends ServerPacket<null> {}

@@ -43,7 +43,7 @@ export class BaseBlock {
     throw new NotImplementedError()
   }
 
-  getRows (): object[] {
+  getRows (): unknown[] {
     throw new NotImplementedError()
   }
 
@@ -51,10 +51,24 @@ export class BaseBlock {
   getColumnByIndex (index: number): unknown[] {
     throw new NotImplementedError()
   }
+
+  transposed (): unknown[] {
+    return this.data[0].map((_, c) => this.data.map(row => row[c]))
+  }
 }
 
 export class ColumnOrientedBlock extends BaseBlock {
+  get colCount (): number {
+    return this.columns.length
+  }
 
+  get rowCount (): number {
+    return this.colCount ? this.data[0].length : 0
+  }
+
+  getRows (): unknown[] {
+    return this.transposed()
+  }
 }
 
 export class RowOrientedBlock extends BaseBlock {

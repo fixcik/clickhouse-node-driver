@@ -3,7 +3,7 @@ import { NotImplementedError } from './exceptions'
 
 export class BufferedReader {
   buffer!: Buffer
-  size!: number
+  size = 0
   position = 0
   buffSize: number
 
@@ -48,7 +48,7 @@ export class BufferedReader {
   }
 
   async readOne (): Promise<number> {
-    if (!this.buffer || this.position === this.size) {
+    if (this.position === this.size) {
       await this.readBlock(1)
       this.position = 0
     }
