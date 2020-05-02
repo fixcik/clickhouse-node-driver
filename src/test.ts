@@ -2,7 +2,7 @@ import Client from './client'
 
 const conn = new Client({ host: 'magnit-dmp.local', port: 9033, database: 'default' })
 
-conn.processOrdinaryQuery('SELECT if(n%2=0, 1, 0) FROM (SELECT 100 as count) ARRAY JOIN range(count) as n').then(res => {
+conn.processOrdinaryQuery("SELECT MD5('aasdasd'), hex(MD5('aasdasd'))").then(res => {
   console.log(res)
 }).catch(e => {
   console.log(e)

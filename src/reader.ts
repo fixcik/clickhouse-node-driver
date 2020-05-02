@@ -1,17 +1,18 @@
 import { readVarUint } from './varint'
 import { BufferedReader } from './buffered_reader'
+import * as defines from './defines'
 
 export const readBinaryBytesFixedLength = (stream: BufferedReader, length: number): Promise<Buffer> => {
   return stream.read(length)
 }
 
-export const readBinaryStringFixedLength = async (stream: BufferedReader, length: number): Promise<string> => {
-  return (await readBinaryBytesFixedLength(stream, length)).toString('utf-8')
+export const readBinaryStringFixedLength = async (stream: BufferedReader, length: number): Promise<Buffer> => {
+  return (await readBinaryBytesFixedLength(stream, length))
 }
 
 export const readBinaryString = async (stream: BufferedReader): Promise<string> => {
   const length = await readVarUint(stream)
-  return await readBinaryStringFixedLength(stream, length)
+  return (await readBinaryStringFixedLength(stream, length)).toString(defines.STRINGS_ENCODING)
 }
 
 export const readBinaryInt = async (stream: BufferedReader, size: number, unsigned = false): Promise<number> => {

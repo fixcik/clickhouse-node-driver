@@ -32,3 +32,18 @@ export class UInt32Column extends UIntColumn {
   intSize = 4
   static chType = 'UInt32'
 }
+
+export class Int8Column extends IntColumn {
+  intSize = 1
+  static chType = 'UInt8'
+}
+
+export class Int16Column extends IntColumn {
+  intSize = 2
+  static chType = 'UInt16'
+}
+
+export class Int32Column extends IntColumn {
+  intSize = 4
+  static chType = 'UInt32'
+}

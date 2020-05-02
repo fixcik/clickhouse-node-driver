@@ -23,3 +23,5 @@ export const CLIENT_VERSION_MAJOR = 0
 export const CLIENT_VERSION_MINOR = 0
 export const CLIENT_VERSION_PATCH = 1
 export const CLIENT_REVISION = 54421
+
+export const STRINGS_ENCODING = 'utf-8'
