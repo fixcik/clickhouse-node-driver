@@ -2,6 +2,7 @@ import { readBinaryInt32, readBinaryInt16, readBinaryUInt32, readBinaryUInt64 } 
 import { readVarUint } from './../varint'
 import Column from './column'
 import Connection from '../сonnection'
+import Long from 'long'
 
 export class ArrayColumn extends Column {
   nested: Column
@@ -10,23 +11,63 @@ export class ArrayColumn extends Column {
     this.nested = nested
   }
 
-  _readSize (conn: Connection): Promise<BigInt> {
-    return readBinaryUInt64(conn.readStream)
-  }
-
   async _readData (conn: Connection, count: number, nullMap: any): Promise<unknown[]> {
     if (count === 0) {
       return []
     }
-    const c1 = await readBinaryUInt64(conn.readStream)
-    const c2 = await readBinaryUInt64(conn.readStream)
-    const c3 = await readBinaryUInt64(conn.readStream)
-    const c4 = await readBinaryUInt64(conn.readStream)
-    // const c3 = await readBinaryUInt64(conn.readStream)
-    // console.log(await this._readSize(conn))
-    console.log(c1, c2, c3, c4)
-    process.exit()
 
-    return []
+    const queue: Array<{column: ArrayColumn; size: bigint; depth: number}> = [{ column: this, size: await readBinaryUInt64(conn.readStream), depth: 0 }]
+    const sliceSeries = []
+
+    let dataSize = BigInt(count)
+    let curDepth = 0
+    let prevOffset = BigInt('0')
+    let slices = []
+    let nested!: Column
+
+    let task
+    while ((task = queue.shift())) {
+      const { column, size, depth } = task
+      nested = column.nested
+
+      if (curDepth !== depth) {
+        curDepth = depth
+        sliceSeries.push(slices)
+        prevOffset = BigInt('0')
+        slices = []
+      }
+
+      if (nested instanceof ArrayColumn) {
+        for (let i = BigInt('0'); i < size; i++) {
+          const offset = await readBinaryUInt64(conn.readStream)
+          dataSize = offset
+          queue.push({
+            column: nested,
+            size: offset - prevOffset,
+            depth: depth + 1
+          })
+          slices.push([prevOffset, offset])
+          prevOffset = offset
+        }
+      } else {
+        prevOffset += size
+      }
+    }
+
+    console.log(sliceSeries)
+    console.log(nested)
+    let data = await nested.readData(conn, dataSize)
+    console.log(data)
+
+    for (const slices of sliceSeries.reverse()) {
+      console.log(slices)
+      const nestedData = []
+      for (const [start, end] of slices) {
+        nestedData.push(data.slice(Number(start), Number(end)))
+      }
+      data = nestedData
+    }
+
+    return data
   }
 }

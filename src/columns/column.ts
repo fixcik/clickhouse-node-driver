@@ -5,7 +5,7 @@ export default class Column {
   nullable = false
   static chType = ''
   nullValue = null
-  readData (conn: Connection, count: number): Promise<unknown[]> {
+  readData (conn: Connection, count: number | bigint): Promise<unknown[]> {
     let nullMap = null
     if (this.nullable) {
       nullMap = this._readNullsMap(conn, count)
@@ -13,7 +13,7 @@ export default class Column {
     return this._readData(conn, count, nullMap)
   }
 
-  async _readData (conn: Connection, count: number, nullMap: any): Promise<unknown[]> {
+  async _readData (conn: Connection, count: number | bigint, nullMap: any): Promise<unknown[]> {
     const items = await this.readItems(conn, count)
     if (nullMap) {
       // TODO: hanle null map
@@ -21,12 +21,12 @@ export default class Column {
     return items
   }
 
-  _readNullsMap (conn: Connection, count: number) {
+  _readNullsMap (conn: Connection, count: number | bigint) {
     // TODO: read null map
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  async readItems (conn: Connection, count: number): Promise<unknown[]> {
+  async readItems (conn: Connection, count: number | bigint): Promise<unknown[]> {
     throw new NotImplementedError()
   }
 }
