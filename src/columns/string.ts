@@ -29,8 +29,3 @@ export class FixedStringColumn extends Column {
       return res
     }
 }
-
-export const createFixedStringColumn = (type: string): FixedStringColumn => {
-  const length = Number(type.slice(12, -1))
-  return new FixedStringColumn(length)
-}

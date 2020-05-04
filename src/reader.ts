@@ -20,12 +20,30 @@ export const readBinaryInt = async (stream: BufferedReader, size: number, unsign
   return buffer[unsigned ? 'readUIntLE' : 'readIntLE'](0, size)
 }
 
+export const readBinaryUInt8 = (stream: BufferedReader): Promise<number> => {
+  return readBinaryInt(stream, 1, true)
+}
+
+export const readBinaryUInt16 = (stream: BufferedReader): Promise<number> => {
+  return readBinaryInt(stream, 2, true)
+}
+
+export const readBinaryUInt32 = (stream: BufferedReader): Promise<number> => {
+  return readBinaryInt(stream, 2, true)
+}
+
+export const readBinaryInt16 = (stream: BufferedReader): Promise<number> => {
+  return readBinaryInt(stream, 2)
+}
+
 export const readBinaryInt32 = (stream: BufferedReader): Promise<number> => {
   return readBinaryInt(stream, 4)
 }
 
-export const readBinaryUInt8 = (stream: BufferedReader): Promise<number> => {
-  return readBinaryInt(stream, 1, true)
+export const readBinaryUInt64 = async (stream: BufferedReader): Promise<BigInt> => {
+  const buffer = await stream.read(8)
+  console.log(buffer)
+  return buffer.readBigUInt64LE()
 }
 
 /**

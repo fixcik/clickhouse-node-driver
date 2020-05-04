@@ -2,7 +2,7 @@ import Client from './client'
 
 const conn = new Client({ host: 'magnit-dmp.local', port: 9033, database: 'default' })
 
-conn.processOrdinaryQuery("SELECT MD5('aasdasd'), hex(MD5('aasdasd'))").then(res => {
+conn.processOrdinaryQuery('SELECT [[2,13,12],[1],[5,4]]').then(res => {
   console.log(res)
 }).catch(e => {
   console.log(e)

@@ -1,8 +1,10 @@
+/* eslint-disable @typescript-eslint/no-use-before-define */
 import { ColumntInfo } from './typings'
 import Column from './columns/column'
 import Connection from './сonnection'
 import { UInt8Column, UInt16Column, UInt32Column } from './columns/int'
-import { StringColumn, createFixedStringColumn } from './columns/string'
+import { StringColumn, FixedStringColumn } from './columns/string'
+import { ArrayColumn } from './columns/array'
 
 const columns = [
   UInt8Column, UInt16Column, UInt32Column,
@@ -15,13 +17,15 @@ for (const column of columns) {
   columnByType[column.chType] = column
 }
 
-export const getColumnByType = (type: string): Column => {
+export const createColumnByType = (type: string): Column => {
+  if (type.startsWith('Array')) {
+    return createArrayColumn(type)
+  }
   if (type.startsWith('FixedString')) {
     return createFixedStringColumn(type)
   }
   if (type.startsWith('Nullable')) {
-    // eslint-disable-next-line @typescript-eslint/no-use-before-define
-    return getNullableColumn(type)
+    return createNullableColumn(type)
   }
   if (type in columnByType) {
     return new columnByType[type]()
@@ -30,18 +34,30 @@ export const getColumnByType = (type: string): Column => {
   }
 }
 
-export const getNullableColumn = (type: string): Column => {
+export const createFixedStringColumn = (type: string): FixedStringColumn => {
+  const length = Number(type.slice(12, -1))
+  return new FixedStringColumn(length)
+}
+
+export const createArrayColumn = (type: string): Column => {
+  type = type.slice(6, -1)
+  return new ArrayColumn(createColumnByType(type))
+}
+
+export const createNullableColumn = (type: string): Column => {
   type = type.slice(9, -1)
-  const column = getColumnByType(type)
+  const column = createColumnByType(type)
   column.nullable = true
   return column
 }
 
-export const getColumnByInfo = ({ type }: ColumntInfo): Column => {
-  return getColumnByType(type)
+export const createColumnByInfo = ({ type }: ColumntInfo): Column => {
+  return createColumnByType(type)
 }
 
 export const readColumn = (conn: Connection, info: ColumntInfo, count: number): Promise<unknown[]> => {
-  const column = getColumnByInfo(info)
+  const column = createColumnByInfo(info)
+  console.log(count)
+  console.log(column)
   return column.readData(conn, count)
 }
