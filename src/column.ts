@@ -2,12 +2,16 @@
 import { ColumntInfo } from './typings'
 import Column from './columns/column'
 import Connection from './сonnection'
-import { UInt8Column, UInt16Column, UInt32Column } from './columns/int'
+import {
+  Int8Column, Int16Column, Int32Column, Int64Column,
+  UInt8Column, UInt16Column, UInt32Column, UInt64Column
+} from './columns/int'
 import { StringColumn, FixedStringColumn } from './columns/string'
 import { ArrayColumn } from './columns/array'
 
 const columns = [
-  UInt8Column, UInt16Column, UInt32Column,
+  Int8Column, Int16Column, Int32Column, Int64Column,
+  UInt8Column, UInt16Column, UInt32Column, UInt64Column,
   StringColumn
 ]
 const columnByType: {

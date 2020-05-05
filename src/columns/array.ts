@@ -10,7 +10,7 @@ export class ArrayColumn extends Column {
     this.nested = nested
   }
 
-  async _readData (conn: Connection, count: number, nullMap: any): Promise<unknown[]> {
+  async _readData (conn: Connection, count: number): Promise<unknown[]> {
     if (!count) {
       return []
     }

@@ -1,16 +1,20 @@
 import Column from './column'
-import { readBinaryInt } from '../reader'
+import { readBinaryInt, readBinaryInt64, readBinaryUInt64 } from '../reader'
 import Connection from '../сonnection'
 
 class IntColumn extends Column {
   intSize = 0
   unsigned = false
-  async readItems (conn: Connection, count: number | bigint): Promise<number[]> {
+  async readItems (conn: Connection, count: number): Promise<(number | bigint)[]> {
     const res = []
-    for (let _ = BigInt(0); _ < BigInt(count); _++) {
-      res.push(await readBinaryInt(conn.readStream, this.intSize, this.unsigned))
+    for (let _ = 0; _ < count; _++) {
+      res.push(await this.readNumber(conn))
     }
     return res
+  }
+
+  async readNumber (conn: Connection): Promise<number | bigint> {
+    return await readBinaryInt(conn.readStream, this.intSize, this.unsigned)
   }
 }
 
@@ -46,4 +50,20 @@ export class Int16Column extends IntColumn {
 export class Int32Column extends IntColumn {
   intSize = 4
   static chType = 'UInt32'
+}
+
+export class Int64Column extends IntColumn {
+  intSize = 8
+  static chType = 'Int64'
+  async readNumber (conn: Connection): Promise<bigint> {
+    return await readBinaryInt64(conn.readStream)
+  }
+}
+
+export class UInt64Column extends Int64Column {
+  unsigned = true
+  static chType = 'UInt64'
+  async readNumber (conn: Connection): Promise<bigint> {
+    return await readBinaryUInt64(conn.readStream)
+  }
 }

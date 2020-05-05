@@ -23,18 +23,14 @@ export default class Client {
 
   async * _packetsGenerator (): AsyncIterable<DataServerPacket> {
     while (true) {
-      try {
-        const packet = await this._receivePacket()
-        if (packet === false) {
-          break
-        }
-        if (packet === true) {
-          continue
-        }
-        yield packet
-      } catch (e) {
-        console.error(e)
+      const packet = await this._receivePacket()
+      if (packet === false) {
+        break
       }
+      if (packet === true) {
+        continue
+      }
+      yield packet
     }
   }
 
