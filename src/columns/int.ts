@@ -5,9 +5,9 @@ import Connection from '../сonnection'
 class IntColumn extends Column {
   intSize = 0
   unsigned = false
-  async readItems (conn: Connection, count: number): Promise<number[]> {
+  async readItems (conn: Connection, count: number | bigint): Promise<number[]> {
     const res = []
-    for (let _ = 0; _ < count; _++) {
+    for (let _ = BigInt(0); _ < BigInt(count); _++) {
       res.push(await readBinaryInt(conn.readStream, this.intSize, this.unsigned))
     }
     return res

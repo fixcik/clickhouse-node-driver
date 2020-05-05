@@ -4,9 +4,9 @@ import Column from './column'
 
 export class StringColumn extends Column {
     static chType = 'String'
-    async readItems (conn: Connection, count: number): Promise<string[]> {
+    async readItems (conn: Connection, count: number | bigint): Promise<string[]> {
       const res = []
-      for (let _ = 0; _ < count; _++) {
+      for (let _ = BigInt(0); _ < BigInt(count); _++) {
         res.push(await readBinaryString(conn.readStream))
       }
       return res

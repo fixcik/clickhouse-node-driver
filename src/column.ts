@@ -57,7 +57,5 @@ export const createColumnByInfo = ({ type }: ColumntInfo): Column => {
 
 export const readColumn = (conn: Connection, info: ColumntInfo, count: number): Promise<unknown[]> => {
   const column = createColumnByInfo(info)
-  console.log(count)
-  console.log(column)
   return column.readData(conn, count)
 }
